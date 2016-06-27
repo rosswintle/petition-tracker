@@ -13,4 +13,5 @@ var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
     mix.sass('app.scss');
+    mix.copy('node_modules/chart.js-v2/Chart.min.js', 'public/js/chart.js-v2/');
 });
