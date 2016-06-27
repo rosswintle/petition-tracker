@@ -3,43 +3,62 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Petition;
 
 class PetitionController extends Controller
 {
 
     public function check( Request $request, $petitionId = null ) {
 
-        if (is_null($petitionId) && $request->has('petitionId')) {
+        if (is_null($petitionId)) {
+            if ($request->has('petitionId')) {
 
-            $petitionId = $request->input('petitionId');
+                $petitionId = $request->input('petitionId');
 
-        } else {
+            } else {
 
-            return response( 'No petition specified', '503' );
+                return response('No petition specified', '503');
+
+            }
+        }
+
+        $petition = Petition::firstOrNew([
+            'remote_id' => $petitionId
+        ]);
+
+        if ( ! isset($petition->description) ) {
+
+            $guzzle = new \GuzzleHttp\Client();
+            $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
+            $json = (string) $result->getBody();
+
+            try {
+
+                $petitionData = \GuzzleHttp\json_decode($json);
+
+            } catch ( Exception $e ) {
+
+                return response( 'Error decoding the petition. It may have expired or been removed.', '503');
+
+            }
+
+            $petitionAttributes = $petitionData->data->attributes;
+            $petition->description = $petitionAttributes->action;
+            $petition->status = $petitionAttributes->state;
+            $petition->last_count = $petitionAttributes->signature_count;
+            //$petition->last_count_time = time();
+
+            $petition->save();
 
         }
 
-        $guzzle = new \GuzzleHttp\Client();
-        $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
-        $json = (string) $result->getBody();
 
-        try {
-
-            $petitionData = \GuzzleHttp\json_decode($json);
-
-        } catch {
-
-            return response( 'Error decoding the petition. It may have expired or been removed.', '503');
-
-        }
-
-        //dd($petitionData);
+        //dd($petition);
 
         return view('petitions.check', [
             'petitionId' => $petitionId,
-            'petitionData' => $petitionData ]);
+            'petition' => $petition ]);
 
     }
     /**

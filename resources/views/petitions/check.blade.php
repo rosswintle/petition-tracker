@@ -10,13 +10,13 @@
     You asked for petition ID: {{ $petitionId }}
 </p>
 <p>
-    We found a petition with description: <em>{{ $petitionData->data->attributes->action }}</em>
+    We found a petition with description: <em>{{ $petition->description }}</em>
 </p>
 <p>
-    This petition is {{ $petitionData->data->attributes->state }}
+    This petition is {{ $petition->status }}
 </p>
 <p>
-    This petition has {{ $petitionData->data->attributes->signature_count }} signatures
+    This petition has {{ $petition->latest_count }} signatures
 </p>
 </body>
 </html>
