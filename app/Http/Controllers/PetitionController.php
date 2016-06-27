@@ -24,7 +24,17 @@ class PetitionController extends Controller
         $guzzle = new \GuzzleHttp\Client();
         $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
         $json = (string) $result->getBody();
-        $petitionData = \GuzzleHttp\json_decode($json);
+
+        try {
+
+            $petitionData = \GuzzleHttp\json_decode($json);
+
+        } catch {
+
+            return response( 'Error decoding the petition. It may have expired or been removed.', '503');
+
+        }
+
         //dd($petitionData);
 
         return view('petitions.check', [
