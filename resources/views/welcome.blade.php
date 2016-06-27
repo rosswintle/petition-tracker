@@ -7,13 +7,16 @@
 
         <style>
             h1 {
+                text-align: center;
                 margin-top: 40px;
+                margin-bottom: 80px;
             }
             h1 a,
             h1 a:active,
             h1 a:hover,
             h1 a:focus {
                 color: #333;
+                text-decoration: none;
             }
             body {
                 margin: 0;
@@ -34,7 +37,9 @@
             </h1>
         </header>
         <div class="container">
-            {{ form }}
+            {!! Form::open(['action' => 'PetitionController@Check']) !!}
+            {!! Form::text('petitionId') !!}
+            {!! Form::close() !!}
         </div>
     </body>
 </html>
