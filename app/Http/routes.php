@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test/{petition_id}', function ( $petitionId ) {
+    $guzzle = new \GuzzleHttp\Client();
+    $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
+    $output = (string) $result->getBody();
+    dd($output);
+});
