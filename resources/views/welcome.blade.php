@@ -1,45 +1,40 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Laravel</title>
+        <title>Petition Tracker</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
         <style>
-            html, body {
-                height: 100%;
+            h1 {
+                margin-top: 40px;
             }
-
+            h1 a,
+            h1 a:active,
+            h1 a:hover,
+            h1 a:focus {
+                color: #333;
+            }
             body {
                 margin: 0;
                 padding: 0;
                 width: 100%;
-                display: table;
                 font-weight: 100;
                 font-family: 'Lato';
             }
 
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
         </style>
     </head>
     <body>
+        <header>
+            <h1>
+                <a href="/">
+                    Petition Tracker
+                </a>
+            </h1>
+        </header>
         <div class="container">
-            <div class="content">
-                <div class="title">Laravel 5</div>
-            </div>
+            {{ form }}
         </div>
     </body>
 </html>

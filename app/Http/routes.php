@@ -21,3 +21,5 @@ Route::get('/test/{petition_id}', function ( $petitionId ) {
     $output = (string) $result->getBody();
     dd($output);
 });
+
+Route::get('/check-petition/{petition_id}', 'PetitionController@Check');
