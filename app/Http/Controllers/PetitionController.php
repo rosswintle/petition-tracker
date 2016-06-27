@@ -9,15 +9,28 @@ use App\Http\Requests;
 class PetitionController extends Controller
 {
 
-    public function check( $petitionId ) {
+    public function check( Request $request, $petitionId = null ) {
+
+        if (is_null($petitionId) && $request->has('petitionId')) {
+
+            $petitionId = $request->input('petitionId');
+
+        } else {
+
+            return response( 'No petition specified', '503' );
+
+        }
+
         $guzzle = new \GuzzleHttp\Client();
         $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
         $json = (string) $result->getBody();
         $petitionData = \GuzzleHttp\json_decode($json);
         //dd($petitionData);
+
         return view('petitions.check', [
             'petitionId' => $petitionId,
             'petitionData' => $petitionData ]);
+
     }
     /**
      * Display a listing of the resource.

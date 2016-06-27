@@ -23,3 +23,5 @@ Route::get('/test/{petition_id}', function ( $petitionId ) {
 });
 
 Route::get('/check-petition/{petition_id}', 'PetitionController@Check');
+Route::get('/check-petition/', 'PetitionController@Check');
+Route::post('/check-petition/', 'PetitionController@Check');
