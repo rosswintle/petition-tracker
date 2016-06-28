@@ -66,10 +66,26 @@
             text-align: center;
             padding: 4px 8px;
         }
+        footer {
+            margin-top: 30px;
+            background-color: #D9D9D9;
+        }
+        footer .container {
+            width: 100%;
+            max-width: 700px;
+            padding: 30px 0;
+        }
     </style>
 </head>
 <body>
     @yield('body')
+
+    <footer>
+        <div class="container centered">
+            <p>An <a href="https://oikos.digital">Oikos Digital</a> Project</p>
+            <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0.</a></p>
+        </div>
+    </footer>
 
     @yield('footer-scripts')
 </body>
