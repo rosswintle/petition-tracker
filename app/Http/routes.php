@@ -11,8 +11,12 @@
 |
 */
 
+use App\Petition;
+
 Route::get('/', function () {
-    return view('welcome');
+    $petitions = Petition::where('status','open')
+        ->get();
+    return view('welcome', ['petitions' => $petitions]);
 });
 
 Route::get('/test/{petition_id}', function ( $petitionId ) {
@@ -22,6 +26,6 @@ Route::get('/test/{petition_id}', function ( $petitionId ) {
     dd($output);
 });
 
-Route::get('/check-petition/{petition_id}', 'PetitionController@Check');
+Route::get('/check-petition/{petition_id}', 'PetitionController@Check')->name('check-petition');
 Route::get('/check-petition/', 'PetitionController@Check');
 Route::post('/check-petition/', 'PetitionController@Check');

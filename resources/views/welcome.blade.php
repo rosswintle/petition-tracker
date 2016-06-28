@@ -6,11 +6,11 @@
         <header>
             <h1>
                 <a href="/">
-                    Petition Tracker
+                    UK Petition Tracker
                 </a>
             </h1>
         </header>
-        <div class="container">
+        <div class="container centered">
             {!! Form::open(['action' => 'PetitionController@Check']) !!}
                 <p>
                     {!! Form::label('petitionId', 'Enter a petition ID') !!}
@@ -21,5 +21,17 @@
                     {!! Form::submit('Track it!') !!}
                 </p>
             {!! Form::close() !!}
+        </div>
+        <div class="container">
+            <h2>Open Petitions</h2>
+            <ul>
+                @foreach ($petitions as $thisPetition)
+                    <li>
+                        <a href="{{ route('check-petition', ['id' => $thisPetition->remote_id])  }}">
+                            <strong>{{ $thisPetition->remote_id }}</strong>: {{ $thisPetition->description }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
 @endsection

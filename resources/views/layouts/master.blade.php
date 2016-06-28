@@ -19,6 +19,12 @@
             color: #333;
             text-decoration: none;
         }
+        h2 {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 34px;
+            font-size: 34px;
+        }
         body {
             margin: 0;
             padding: 0;
@@ -26,7 +32,18 @@
             font-weight: 100;
             font-size: 24px;
             font-family: 'Lato';
+        }
+        .container {
+            width: 100%;
+            padding: 0 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .centered {
             text-align: center;
+        }
+        a {
+            text-decoration: none;
         }
         form, input {
             font-size: 24px;

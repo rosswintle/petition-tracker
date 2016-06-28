@@ -64,12 +64,12 @@ class PetitionController extends Controller
             }
         }
 
-
         //dd($petition);
 
         return view('petitions.check', [
             'petitionId' => $petitionId,
-            'petition' => $petition ]);
+            'petition' => $petition,
+        ]);
 
     }
     /**
