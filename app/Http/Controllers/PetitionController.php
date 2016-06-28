@@ -10,6 +10,13 @@ use App\Petition;
 class PetitionController extends Controller
 {
 
+    public function fetchPetitionJson( $petitionId ) {
+        $guzzle = new \GuzzleHttp\Client();
+        $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
+        $json = (string) $result->getBody();
+        return $json;
+    }
+
     public function check( Request $request, $petitionId = null ) {
 
         if (is_null($petitionId)) {
@@ -30,9 +37,7 @@ class PetitionController extends Controller
 
         if ( ! isset($petition->description) ) {
 
-            $guzzle = new \GuzzleHttp\Client();
-            $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
-            $json = (string) $result->getBody();
+            $json = $this->fetchPetitionJson( $petitionId );
 
             try {
 
@@ -51,10 +56,8 @@ class PetitionController extends Controller
             //$petition->last_count_time = time();
 
             $petition->save();
+            $this->dispatchPetitionJob($petition->id);
 
-            // Stick the job on the queue
-            $job = (new UpdatePetitionData($petition->id))->delay(60*5);
-            $this->dispatch($job);
 
         }
 
@@ -141,4 +144,17 @@ class PetitionController extends Controller
     {
         //
     }
+
+    /**
+     * Adds a data collection job for the specified
+     *
+     * @param $id
+     */
+    public function dispatchPetitionJob($id)
+    {
+        // Stick the job on the queue
+        $job = (new UpdatePetitionData($id))->delay(60 * 5);
+        $this->dispatch($job);
+    }
+
 }
