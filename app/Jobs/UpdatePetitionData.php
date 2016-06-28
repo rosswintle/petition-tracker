@@ -62,6 +62,7 @@ class UpdatePetitionData extends Job implements ShouldQueue
 
             // Set the latest count on the petition too
             $petition->last_count = $petitionAttributes->signature_count;
+            $petition->last_count_timestamp = date("Y-m-d H:i:s");
 
             if ('open' == $petitionAttributes->state) {
 

@@ -53,7 +53,7 @@ class PetitionController extends Controller
             $petition->description = $petitionAttributes->action;
             $petition->status = $petitionAttributes->state;
             $petition->last_count = $petitionAttributes->signature_count;
-            //$petition->last_count_time = time();
+            $petition->last_count_timestamp = date("Y-m-d H:i:s");
 
             $petition->save();
 
