@@ -13,7 +13,8 @@
         <div class="container">
             {!! Form::open(['action' => 'PetitionController@Check']) !!}
                 <p>
-                    {!! Form::label('petitionId', 'Enter a petition ID: ') !!}
+                    {!! Form::label('petitionId', 'Enter a petition ID') !!}
+                    <br>
                     {!! Form::text('petitionId') !!}
                 </p>
                 <p>
