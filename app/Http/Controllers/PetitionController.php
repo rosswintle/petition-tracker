@@ -56,9 +56,12 @@ class PetitionController extends Controller
             //$petition->last_count_time = time();
 
             $petition->save();
-            $this->dispatchPetitionJob($petition->id);
 
+            if ('open' == $petition->status) {
 
+                $this->dispatchPetitionJob($petition->id);
+
+            }
         }
 
 
