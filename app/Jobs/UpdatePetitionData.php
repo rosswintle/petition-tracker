@@ -55,7 +55,7 @@ class UpdatePetitionData extends Job implements ShouldQueue
             if ('open' == $petitionAttributes->state) {
 
                 $dataPoint = new DataPoint();
-                $dataPoint->data_timestamp = time();
+                $dataPoint->data_timestamp = date("Y-m-d H:i:s");
                 $dataPoint->petition_id = $this->petitionId;
                 $dataPoint->count = $petitionAttributes->signature_count;
                 $dataPoint->save();

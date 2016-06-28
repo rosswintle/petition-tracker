@@ -15,7 +15,7 @@ class CreateDataPointsTable extends Migration
         Schema::create('data_points', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->time('data_timestamp');
+            $table->timestamp('data_timestamp');
             $table->integer('petition_id')->unsigned();
             $table->foreign('petition_id')->references('id')->on('petitions');
             $table->integer('count');
