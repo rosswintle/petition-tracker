@@ -22,4 +22,27 @@
         This petition has <strong>{{ $petition->last_count }}</strong> signatures (last checked on {{ $petition->last_count_timestamp }})
     </p>
 </div>
+<div class="container centered">
+    <h2>Latest counts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Timestamp
+                </th>
+                <th>
+                    Signature count
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($dataPoints as $thisData)
+                <tr>
+                    <td>{{ $thisData->data_timestamp }}</td>
+                    <td>{{ $thisData->count }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 @endsection

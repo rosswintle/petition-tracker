@@ -59,7 +59,13 @@
             border: 1px solid #888;
             padding: 8px 18px;
         }
-
+        table {
+            margin: 0 auto;
+        }
+        td {
+            text-align: center;
+            padding: 4px 8px;
+        }
     </style>
 </head>
 <body>

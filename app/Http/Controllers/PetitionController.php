@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataPoint;
 use App\Jobs\UpdatePetitionData;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -66,9 +67,15 @@ class PetitionController extends Controller
 
         //dd($petition);
 
+        $dataPoints = DataPoint::where('petition_id', $petition->id)
+            ->limit(20)
+            ->orderby('data_timestamp', 'desc')
+            ->get();
+
         return view('petitions.check', [
             'petitionId' => $petitionId,
             'petition' => $petition,
+            'dataPoints' => $dataPoints,
         ]);
 
     }
