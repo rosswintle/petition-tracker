@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Checking Petition</title>
-</head>
-<body>
-    <h1>Checking Petition</h1>
+@extends('layouts.master')
+
+@section('title', 'Petition ' . $petitionId)
+
+@section('body')
+<h1>Checking Petition: {{ $petitionId }}</h1>
 <p>
-    You asked for petition ID: {{ $petitionId }}
+    We found a petition with description:<br> <em>{{ $petition->description }}</em>
 </p>
 <p>
-    We found a petition with description: <em>{{ $petition->description }}</em>
+    This petition is: <strong>{{ $petition->status }}</strong>
 </p>
 <p>
-    This petition is {{ $petition->status }}
+    This petition has <strong>{{ $petition->last_count }}</strong> signatures (last checked on {{ $petition->last_count_timestamp }})
 </p>
-<p>
-    This petition has {{ $petition->last_count }} signatures (last checked on {{ $petition->last_count_timestamp }})
-</p>
-</body>
-</html>
+@endsection
