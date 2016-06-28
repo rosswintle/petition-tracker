@@ -16,7 +16,7 @@
     This petition is {{ $petition->status }}
 </p>
 <p>
-    This petition has {{ $petition->latest_count }} signatures
+    This petition has {{ $petition->last_count }} signatures
 </p>
 </body>
 </html>

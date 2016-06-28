@@ -61,7 +61,7 @@ class UpdatePetitionData extends Job implements ShouldQueue
             $dataPoint->save();
 
             // Set the latest count on the petition too
-            $petition->latest_count = $petitionAttributes->signature_count;
+            $petition->last_count = $petitionAttributes->signature_count;
 
             if ('open' == $petitionAttributes->state) {
 
