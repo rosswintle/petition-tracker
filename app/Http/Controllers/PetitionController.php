@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UpdatePetitionData;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Petition;
@@ -50,6 +51,10 @@ class PetitionController extends Controller
             //$petition->last_count_time = time();
 
             $petition->save();
+
+            // Stick the job on the queue
+            $job = (new UpdatePetitionData($petition->id))->delay(60*5);
+            $this->dispatch($job);
 
         }
 
