@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\DataPoint;
+use App\Http\Controllers\PetitionController;
 use App\Jobs\Job;
 use App\Petition;
 use Illuminate\Queue\SerializesModels;
@@ -17,7 +19,7 @@ class UpdatePetitionData extends Job implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $petitionId
      */
     public function __construct( $petitionId )
     {
@@ -29,10 +31,42 @@ class UpdatePetitionData extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle( )
+    public function handle( PetitionController $controller )
     {
 
         $petition = Petition::find( $this->petitionId );
+        if ( ! empty( $petition ) ) {
 
+            $json = $controller->fetchPetitionJson($petition->remote_id);
+
+            try {
+
+                $petitionData = \GuzzleHttp\json_decode($json);
+
+            } catch (Exception $e) {
+
+                // TODO: Error handling
+                // return response( 'Error decoding the petition. It may have expired or been removed.', '503');
+
+            }
+
+            $petitionAttributes = $petitionData->data->attributes;
+
+            if ('open' == $petitionAttributes->state) {
+
+                $dataPoint = new DataPoint();
+                $dataPoint->data_timestamp = time();
+                $dataPoint->petition_id = $this->petitionId;
+                $dataPoint->count = $petitionAttributes->signature_count;
+                $dataPoint->save();
+
+                $controller->dispatchPetitionJob($petition->id);
+
+            } else {
+
+                $petition->status = $petitionAttributes->state;
+
+            }
+        }
     }
 }
