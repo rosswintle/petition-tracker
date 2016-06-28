@@ -70,5 +70,7 @@
 </head>
 <body>
     @yield('body')
+
+    @yield('footer-scripts')
 </body>
 </html>

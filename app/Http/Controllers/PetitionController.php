@@ -68,14 +68,19 @@ class PetitionController extends Controller
         //dd($petition);
 
         $dataPoints = DataPoint::where('petition_id', $petition->id)
-            ->limit(20)
-            ->orderby('data_timestamp', 'desc')
+            ->limit(100)
+            ->orderby('data_timestamp', 'asc')
             ->get();
+
+        $chartDataLabels = array_pluck($dataPoints, 'data_timestamp');
+        $chartDataValues = array_pluck($dataPoints, 'count');
 
         return view('petitions.check', [
             'petitionId' => $petitionId,
             'petition' => $petition,
             'dataPoints' => $dataPoints,
+            'chartDataLabels' => $chartDataLabels,
+            'chartDataValues' => $chartDataValues,
         ]);
 
     }
