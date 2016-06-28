@@ -52,14 +52,20 @@ class UpdatePetitionData extends Job implements ShouldQueue
 
             $petitionAttributes = $petitionData->data->attributes;
 
+            // Always add a data point. If petition is now closed then
+            // this is a final data point.
+            $dataPoint = new DataPoint();
+            $dataPoint->data_timestamp = date("Y-m-d H:i:s");
+            $dataPoint->petition_id = $this->petitionId;
+            $dataPoint->count = $petitionAttributes->signature_count;
+            $dataPoint->save();
+
+            // Set the latest count on the petition too
+            $petition->latest_count = $petitionAttributes->signature_count;
+
             if ('open' == $petitionAttributes->state) {
 
-                $dataPoint = new DataPoint();
-                $dataPoint->data_timestamp = date("Y-m-d H:i:s");
-                $dataPoint->petition_id = $this->petitionId;
-                $dataPoint->count = $petitionAttributes->signature_count;
-                $dataPoint->save();
-
+                // Still open - set the next job
                 $controller->dispatchPetitionJob($petition->id);
 
             } else {
@@ -67,6 +73,10 @@ class UpdatePetitionData extends Job implements ShouldQueue
                 $petition->status = $petitionAttributes->state;
 
             }
+
+            // Save any updates to the petition
+            $petition->save();
+
         }
     }
 }
