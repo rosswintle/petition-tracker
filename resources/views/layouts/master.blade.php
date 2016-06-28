@@ -83,6 +83,7 @@
     <footer>
         <div class="container centered">
             <p>An <a href="https://oikos.digital">Oikos Digital</a> Project</p>
+            <p>I'm using cookies for Analytics. You need to know.</p>
             <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0.</a></p>
         </div>
     </footer>
