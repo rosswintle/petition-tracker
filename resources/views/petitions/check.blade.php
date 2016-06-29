@@ -15,6 +15,8 @@
                 labels: {!! json_encode( $chartDataLabels ) !!},
                 datasets: [
                     {
+                        label: 'Signatures',
+                        fill: true,
                         data: {!! json_encode( $chartDataValues ) !!}
                     }
                 ]
