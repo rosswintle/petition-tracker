@@ -76,7 +76,6 @@ class PetitionController extends Controller
         return view('petitions.check', [
             'petitionId' => $petitionId,
             'petition' => $petition,
-            'dataPoints' => $dataPoints,
             'chartDataLabels' => $chartDataLabels,
             'chartDataValues' => $chartDataValues,
         ]);
