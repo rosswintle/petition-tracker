@@ -68,8 +68,6 @@ class PetitionController extends Controller
         //dd($petition);
 
         $dataPoints = DataPoint::where('petition_id', $petition->id)
-            ->limit(100)
-            ->orderby('data_timestamp', 'asc')
             ->get();
 
         $chartDataLabels = array_pluck($dataPoints, 'data_timestamp');
