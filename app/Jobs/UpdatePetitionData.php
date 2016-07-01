@@ -57,7 +57,7 @@ class UpdatePetitionData extends Job implements ShouldQueue
             $date = date("Y-m-d H:i:s");
 
             // Fetch the last value for creating the delta later
-            $lastDataPoint = DataPoint::orderBy('id', 'desc')->first();
+            $lastDataPoint = DataPoint::where('petition_id', $this->petitionId)->orderBy('id', 'desc')->first();
 
             // Always add a data point. If petition is now closed then
             // this is a final data point.
@@ -74,7 +74,7 @@ class UpdatePetitionData extends Job implements ShouldQueue
             if (! empty($lastDataPoint)) {
                 $delta->delta = $petitionAttributes->signature_count - $lastDataPoint->count;
             } else {
-                $delta->delta = null;
+                $delta->delta = 0;
             }
             $delta->save();
 
