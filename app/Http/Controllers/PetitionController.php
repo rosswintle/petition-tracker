@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataPoint;
+use App\DataPointDelta;
 use App\Jobs\UpdatePetitionData;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -69,15 +70,19 @@ class PetitionController extends Controller
 
         $dataPoints = DataPoint::where('petition_id', $petition->id)
             ->get();
+        $deltas = DataPointDelta::where('petition_id', $petition->id)
+            ->get();
 
         $chartDataLabels = array_pluck($dataPoints, 'data_timestamp');
         $chartDataValues = array_pluck($dataPoints, 'count');
+        $chartDeltaValues = array_pluck($deltas, 'delta');
 
         return view('petitions.check', [
             'petitionId' => $petitionId,
             'petition' => $petition,
             'chartDataLabels' => $chartDataLabels,
             'chartDataValues' => $chartDataValues,
+            'chartDeltaValues' => $chartDeltaValues,
         ]);
 
     }

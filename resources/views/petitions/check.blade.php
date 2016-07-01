@@ -15,10 +15,26 @@
                         label: 'Signatures',
                         fill: true,
                         data: {!! json_encode( $chartDataValues ) !!}
+                    },
+                ]
+            }
+        });
+        var ctx2 = document.getElementById("deltaChart");
+        var dataChart = new Chart( ctx2, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode( $chartDataLabels ) !!},
+                datasets: [
+                    {
+                        label: 'Change',
+                        fill: false,
+                        data: {!! json_encode( $chartDeltaValues) !!},
+                        pointBorderColor: '#F00'
                     }
                 ]
             }
         })
+
     </script>
 @endsection
 
@@ -45,4 +61,8 @@
 <div class="container centered">
     <canvas id="datapointChart" width="400" height="400"></canvas>
 </div>
+<div class="container centered">
+    <canvas id="deltaChart" width="400" height="400"></canvas>
+</div>
+
 @endsection
