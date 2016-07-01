@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\DataPoint;
+use App\DataPointDelta;
 use App\Http\Controllers\PetitionController;
 use App\Jobs\Job;
 use App\Petition;
@@ -52,17 +53,34 @@ class UpdatePetitionData extends Job implements ShouldQueue
 
             $petitionAttributes = $petitionData->data->attributes;
 
+
+            $date = date("Y-m-d H:i:s");
+
+            // Fetch the last value for creating the delta later
+            $lastDataPoint = DataPoint::orderBy('id', 'desc')->first();
+
             // Always add a data point. If petition is now closed then
             // this is a final data point.
             $dataPoint = new DataPoint();
-            $dataPoint->data_timestamp = date("Y-m-d H:i:s");
+            $dataPoint->data_timestamp = $date;
             $dataPoint->petition_id = $this->petitionId;
             $dataPoint->count = $petitionAttributes->signature_count;
             $dataPoint->save();
 
+
+            $delta = new DataPointDelta();
+            $delta->delta_timestamp = $date;
+            $delta->petition_id = $this->petitionId;
+            if (! empty($lastDataPoint)) {
+                $delta->delta = $petitionAttributes->signature_count - $lastDataPoint->count;
+            } else {
+                $delta->delta = null;
+            }
+            $delta->save();
+
             // Set the latest count on the petition too
             $petition->last_count = $petitionAttributes->signature_count;
-            $petition->last_count_timestamp = date("Y-m-d H:i:s");
+            $petition->last_count_timestamp = $date;
 
             if ('open' == $petitionAttributes->state) {
 
