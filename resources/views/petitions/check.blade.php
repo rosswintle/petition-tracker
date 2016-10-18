@@ -3,6 +3,7 @@
 @section('title', 'Petition ' . $petitionId)
 
 @section('footer-scripts')
+    <script type="text/javascript" src="/js/moment.js/moment.min.js"></script>
     <script type="text/javascript" src="/js/chart.js-v2/Chart.min.js"></script>
     <script type="text/javascript">
         var ctx = document.getElementById("datapointChart");
