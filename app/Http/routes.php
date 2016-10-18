@@ -15,6 +15,7 @@ use App\Petition;
 
 Route::get('/', function () {
     $petitions = Petition::where('status','open')
+        ->orderBy('remote_id', 'desc')
         ->get();
     return view('welcome', ['petitions' => $petitions]);
 });
