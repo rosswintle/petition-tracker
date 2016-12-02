@@ -56,6 +56,9 @@
         This petition is: <strong>{{ $petition->status }}</strong>
     </p>
     <p>
+        Link to petition: <a href="https://petition.parliament.uk/petitions/{{ $petitionId }}">https://petition.parliament.uk/petitions/{{ $petitionId }}</a>
+    </p>
+    <p>
         This petition has <strong>{{ $petition->last_count }}</strong> signatures (last checked on {{ $petition->last_count_timestamp }})
     </p>
 </div>
