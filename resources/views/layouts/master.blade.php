@@ -110,7 +110,7 @@
                 xmlHttp.open("GET", theUrl, true); // true for asynchronous
                 xmlHttp.send(null);
             }
-            kownterHttpGetAsync( {{ env('KOWNTER_APP_URL') }} + '/track?referrer=' + encodeURIComponent( document.referrer ), function() { return true; } );
+            kownterHttpGetAsync( '{{ env('KOWNTER_APP_URL') }}/track?referrer=' + encodeURIComponent( document.referrer ), function() { return true; } );
         </script>
     @endif
 
