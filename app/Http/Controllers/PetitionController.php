@@ -41,7 +41,7 @@ class PetitionController extends Controller
             'remote_id' => $petitionId
         ]);
 
-        if ( ! isset($petition->description) ) {
+        if ( ! isset($petition->description) || empty($petition->description) ) {
 
             try {
 
