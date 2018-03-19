@@ -14,7 +14,11 @@ class PetitionController extends Controller
 
     public function fetchPetitionJson( $petitionId ) {
         $guzzle = new \GuzzleHttp\Client();
-        $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
+        try {
+            $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
+        } catch (Exception $e) {
+            $result = '';
+        }
         $json = (string) $result->getBody();
         return $json;
     }
@@ -39,7 +43,16 @@ class PetitionController extends Controller
 
         if ( ! isset($petition->description) ) {
 
-            $json = $this->fetchPetitionJson( $petitionId );
+            try {
+
+                $json = $this->fetchPetitionJson( $petitionId );
+
+            } catch ( Exception $e ) {
+
+
+
+            }
+
 
             try {
 
