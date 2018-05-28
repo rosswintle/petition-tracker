@@ -129,6 +129,7 @@ class PetitionController extends Controller
         } catch (\Exception $e) {
 
             Log::info('Error while fetching petition data for petition ID ' . $petition->remote_id);
+            $petition->markError();
             return;
 
         }
@@ -140,6 +141,7 @@ class PetitionController extends Controller
         } catch (\Exception $e) {
 
             Log::info('Error while decoding petition JSON for petition ID ' . $petition->remote_id);
+            $petition->markError();
             return;
 
         }
@@ -147,6 +149,7 @@ class PetitionController extends Controller
         if (empty($petitionData)) {
 
             Log::info('Petition data for petition ID ' . $petition->remote_id . ' was empty for some reason');
+            $petition->markMissing();
             return;
 
         }
