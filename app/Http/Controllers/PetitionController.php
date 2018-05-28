@@ -8,17 +8,28 @@ use App\Jobs\UpdatePetitionData;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Petition;
+use Illuminate\Support\Facades\Log;
 
 class PetitionController extends Controller
 {
 
     public function fetchPetitionJson( $petitionId ) {
-        $guzzle = new \GuzzleHttp\Client();
+        $guzzle = new \GuzzleHttp\Client([
+            'allow_redirects' => false,
+        ]);
+
         try {
             $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
-        } catch (Exception $e) {
-            $result = '';
+        } catch (\Exception $e) {
+            Log::info('An exception occurred while fetching JSON for petition ' . $petitionId );
+            return '';
         }
+
+        if ( $result->getStatusCode() != 200 ) {
+            Log::info('HTTP response code for fetching petition data for petition ID ' . $petitionId . ' was ' . $result->getStatusCode() );
+            return '';
+        }
+
         $json = (string) $result->getBody();
         return $json;
     }
