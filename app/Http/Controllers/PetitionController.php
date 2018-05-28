@@ -64,7 +64,7 @@ class PetitionController extends Controller
 
                 $json = $this->fetchPetitionJson( $petitionId );
 
-            } catch ( Exception $e ) {
+            } catch ( \Exception $e ) {
 
                 // TODO: Handle error on initial fetch
 
@@ -75,7 +75,7 @@ class PetitionController extends Controller
 
                 $petitionData = \GuzzleHttp\json_decode($json);
 
-            } catch ( Exception $e ) {
+            } catch ( \Exception $e ) {
 
                 return response( 'Error decoding the petition. It may have expired or been removed.', '503');
 
