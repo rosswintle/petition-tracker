@@ -15,7 +15,7 @@
                 <p>
                     {!! Form::label('petitionId', 'Enter a petition ID') !!}
                     <br>
-                    {!! Form::text('petitionId') !!}
+                    {!! Form::number('petitionId') !!}
                 </p>
                 <p>
                     {!! Form::submit('Track it!') !!}
