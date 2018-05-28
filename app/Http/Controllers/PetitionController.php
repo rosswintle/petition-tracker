@@ -83,11 +83,6 @@ class PetitionController extends Controller
 
             $petition->save();
 
-            if ('open' == $petition->status) {
-
-                $this->dispatchPetitionJob($petition->id);
-
-            }
         }
 
         //dd($petition);
@@ -136,8 +131,6 @@ class PetitionController extends Controller
         } catch (\Exception $e) {
 
             Log::info('Error while fetching petition data for petition ID ' . $petition->remote_id);
-            // Something failed - retry later
-            $this->dispatchPetitionJob($petition->id);
             return;
 
         }
@@ -149,8 +142,6 @@ class PetitionController extends Controller
         } catch (\Exception $e) {
 
             Log::info('Error while decoding petition JSON for petition ID ' . $petition->remote_id);
-            // Something failed - retry later
-            $this->dispatchPetitionJob($petition->id);
             return;
 
         }
@@ -158,8 +149,6 @@ class PetitionController extends Controller
         if (empty($petitionData)) {
 
             Log::info('Petition data for petition ID ' . $petition->remote_id . ' was empty for some reason');
-            // Something failed - retry later
-            $this->dispatchPetitionJob($petition->id);
             return;
 
         }
