@@ -75,6 +75,18 @@
             max-width: 700px;
             padding: 30px 0;
         }
+        footer a {
+            background-color: #CCC;
+            transition: background-color 0.5s, color 0.5s;
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+        }
+        footer a:active,
+        footer a:hover,
+        footer a:focus {
+            background-color: #888;
+            color: #DDD;
+        }
     </style>
 </head>
 <body>
