@@ -85,8 +85,6 @@ class PetitionController extends Controller
 
         }
 
-        //dd($petition);
-
         $dataPoints = DataPoint::where('petition_id', $petition->id)
             ->get();
         $deltas = DataPointDelta::where('petition_id', $petition->id)
