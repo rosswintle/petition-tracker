@@ -110,80 +110,109 @@ class PetitionController extends Controller
         ]);
 
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @return null
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        //
+
+        $petition = Petition::find( $id );
+
+        if ( empty( $petition ) ) {
+
+            Log::info( 'Could not find a petition entry in the database for petition ID ' . $this->petitionId );
+            return;
+
+        }
+
+        try {
+
+            $json = $this->fetchPetitionJson($petition->remote_id);
+
+        } catch (\Exception $e) {
+
+            Log::info('Error while fetching petition data for petition ID ' . $petition->remote_id);
+            // Something failed - retry later
+            $this->dispatchPetitionJob($petition->id);
+            return;
+
+        }
+
+        try {
+
+            $petitionData = \GuzzleHttp\json_decode($json);
+
+        } catch (\Exception $e) {
+
+            Log::info('Error while decoding petition JSON for petition ID ' . $petition->remote_id);
+            // Something failed - retry later
+            $this->dispatchPetitionJob($petition->id);
+            return;
+
+        }
+
+        if (empty($petitionData)) {
+
+            Log::info('Petition data for petition ID ' . $petition->remote_id . ' was empty for some reason');
+            // Something failed - retry later
+            $this->dispatchPetitionJob($petition->id);
+            return;
+
+        }
+
+        $petitionAttributes = $petitionData->data->attributes;
+
+        $date = date("Y-m-d H:i:s");
+
+        // Fetch the last value for creating the delta later
+        $lastDataPoint = DataPoint::where('petition_id', $id)->orderBy('id', 'desc')->first();
+
+        // Always add a data point. If petition is now closed then
+        // this is a final data point.
+        $dataPoint = new DataPoint();
+        $dataPoint->data_timestamp = $date;
+        $dataPoint->petition_id = $id;
+        $dataPoint->count = $petitionAttributes->signature_count;
+        $dataPoint->save();
+
+
+        $delta = new DataPointDelta();
+        $delta->delta_timestamp = $date;
+        $delta->petition_id = $id;
+        if (!empty($lastDataPoint)) {
+            $delta->delta = $petitionAttributes->signature_count - $lastDataPoint->count;
+        } else {
+            $delta->delta = 0;
+        }
+        $delta->save();
+
+        // Set the latest count on the petition too
+        $petition->last_count = $petitionAttributes->signature_count;
+        $petition->last_count_timestamp = $date;
+
+        if ('open' != $petitionAttributes->state) {
+
+            $petition->status = $petitionAttributes->state;
+
+        }
+
+        // Save any updates to the petition
+        $petition->save();
+
+        return;
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function updateAll() {
+
+        $activePetitions = Petition::where('status', 'open')->get();
+
+        $activePetitions->pluck('id')->map( [ $this, 'update' ] );
+
     }
 
     /**
@@ -196,6 +225,11 @@ class PetitionController extends Controller
         // Stick the job on the queue
         $job = (new UpdatePetitionData($id))->delay(60 * 5);
         $this->dispatch($job);
+    }
+
+    public function checkJobs() {
+        $petitions = Petition::where('status', 'open')->get();
+        dd($petitions);
     }
 
 }

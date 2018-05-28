@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\Inspire::class,
         Commands\FillDeltas::class,
     ];
 
@@ -25,7 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call( function () {
+            resolve('\App\Http\Controllers\PetitionController')->updateAll();
+        })->everyFiveMinutes();
     }
 }
