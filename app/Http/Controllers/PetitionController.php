@@ -41,6 +41,12 @@ class PetitionController extends Controller
 
                 $petitionId = $request->input('petitionId');
 
+                $petition = Petition::where('remote_id', $petitionId);
+
+                if ( $petition ) {
+                    return redirect()->route( 'check-petition', [ 'petition_id' => $petitionId ] );
+                }
+
             } else {
 
                 return response('No petition specified', '503');
@@ -60,7 +66,7 @@ class PetitionController extends Controller
 
             } catch ( Exception $e ) {
 
-
+                // TODO: Handle error on initial fetch
 
             }
 
@@ -82,6 +88,9 @@ class PetitionController extends Controller
             $petition->last_count_timestamp = date("Y-m-d H:i:s");
 
             $petition->save();
+
+            // This was a new petition, probably. So redirect to the petition URL
+            return redirect()->route('check-petition', $petitionId);
 
         }
 
