@@ -17,6 +17,10 @@ class Petition extends Model
         $this->updateStatus( 'missing' );
     }
 
+    public function markOpen() {
+        $this->updateStatus( 'missing' );
+    }
+
     public function updateStatus( $newStatus ) {
         $this->status = $newStatus;
         $this->save();
