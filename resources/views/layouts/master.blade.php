@@ -3,8 +3,6 @@
 <head>
     <title>Petition Tracker - @yield('title')</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,400" rel="stylesheet" type="text/css">
-
     <style>
         h1 {
             text-align: center;
@@ -31,7 +29,8 @@
             width: 100%;
             font-weight: 100;
             font-size: 24px;
-            font-family: 'Lato';
+            /* System font stack */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
         .container {
             width: 100%;
