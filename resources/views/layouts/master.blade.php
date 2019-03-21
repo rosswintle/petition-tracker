@@ -90,9 +90,8 @@
 </head>
 <body>
     <div style="background-color: #feb2b2; padding: 1rem;">
-        Hi! It looks like the Government Petitions site is struggling this morning and they've cut off access to the data I use to track growth.<br>
-        I'm hoping it will be back soon. Thanks for your patience.<br>
-        If you like this tool then send me a tweet of support to <a href="https://twitter.com/magicroundabout">@magicroundabout</a> !
+        Hi! It looks like the Government Petitions site is struggling this morning.<br>
+        I'm trying to grab data every 5 minutes, but I'm dependent on their service working!<br>
     </div>
     @yield('body')
 
