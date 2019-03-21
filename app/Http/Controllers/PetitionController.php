@@ -112,13 +112,17 @@ class PetitionController extends Controller
 
         $chartDataLabels = array_pluck($dataPoints, 'data_timestamp');
         $chartDataValues = array_pluck($dataPoints, 'count');
+        $chartDataXY = $dataPoints->map(function ($dataPoint) {
+            $timestamp = Carbon::parse($dataPoint->data_timestamp)->getTimestamp();
+            return ['x' => $timestamp, 'y' => $dataPoint->count];
+        });
         $chartDeltaValues = array_pluck($deltas, 'delta');
 
         return view('petitions.check', [
             'petitionId' => $petitionId,
             'petition' => $petition,
             'chartDataLabels' => $chartDataLabels,
-            'chartDataValues' => $chartDataValues,
+            'chartDataValues' => $chartDataXY,
             'chartDeltaValues' => $chartDeltaValues,
             'timeFrameLabel' => $timeFrameLabel,
         ]);
