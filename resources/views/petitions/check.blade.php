@@ -8,23 +8,42 @@
     <script type="text/javascript">
         var ctx = document.getElementById("datapointChart");
         var dataChart = new Chart( ctx, {
-            type: 'line',
+            type: 'scatter',
             data: {
-                labels: {!! json_encode( $chartDataLabels ) !!},
                 datasets: [
                     {
                         label: 'Signatures',
                         fill: true,
                         data: {!! json_encode( $chartDataValues ) !!}
                     },
-                ]
+                ],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return (new moment(value * 1000).format('D MMM YYYY HH:mm'));
+                            }
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var date = new moment(tooltipItem.xLabel * 1000).format('D MMM YYYY HH:mm');
+                            return date + ' : ' + tooltipItem.yLabel + ' signatures';
+                        }
+                    }
+                }
+
             }
+
         });
         var ctx2 = document.getElementById("deltaChart");
         var dataChart = new Chart( ctx2, {
-            type: 'line',
+            type: 'scatter',
             data: {
-                labels: {!! json_encode( $chartDataLabels ) !!},
                 datasets: [
                     {
                         label: 'Change',
@@ -33,6 +52,25 @@
                         pointBorderColor: '#F00'
                     }
                 ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return (new moment(value * 1000).format('D MMM YYYY HH:mm'));
+                            }
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var date = new moment(tooltipItem.xLabel * 1000).format('D MMM YYYY HH:mm');
+                            return date + ' : ' + tooltipItem.yLabel + ' signatures';
+                        }
+                    }
+                }
             }
         })
 
