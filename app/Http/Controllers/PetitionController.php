@@ -164,10 +164,6 @@ class PetitionController extends Controller
 
         }
 
-        if (! $petition->status == 'open') {
-            $petition->markOpen();
-        }
-
         $petitionAttributes = $petitionData->data->attributes;
 
         $date = date("Y-m-d H:i:s");
@@ -200,7 +196,7 @@ class PetitionController extends Controller
 
         if ('open' != $petitionAttributes->state) {
 
-            $petition->status = $petitionAttributes->state;
+            $petition->updateStatus($petitionAttributes->state);
 
         }
 
