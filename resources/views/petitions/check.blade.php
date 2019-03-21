@@ -47,10 +47,10 @@
         </a>
     </h1>
     <h2>
-        Checking Petition: {{ $petitionId }}
+        Petition: {{ $petitionId }}
     </h2>
     <p>
-        We found a petition with description:<br> <em>{{ $petition->description }}</em>
+        Description:<br> <em>{{ $petition->description }}</em>
     </p>
     <p>
         This petition is: <strong>{{ $petition->status }}</strong>
