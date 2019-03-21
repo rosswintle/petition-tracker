@@ -99,7 +99,7 @@
 
     <footer>
         <div class="container centered">
-            <p>An <a href="https://oikos.digital/">Oikos Digital</a> Project</p>
+            <p>An <a href="https://oikos.digital/">Oikos Digital</a> Project, made by <a href="https://twitter.com/magicroundabout">@magicroundabout</a>.</p>
             <p>This site uses <a href="https://blog.kownter.com/about-kownter/">Kownter</a> for analytics.
                 This does not use cookies and does not collect any personal data.
                 <a href="https://blog.kownter.com/about-kownter/">Find out more</a>.</p>
