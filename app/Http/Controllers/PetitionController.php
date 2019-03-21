@@ -36,7 +36,7 @@ class PetitionController extends Controller
         return $json;
     }
 
-    public function check( Request $request, $petitionId = null, $startTime = null ) {
+    public function check( Request $request, $petitionId = null, $startTime = null, $timeFrameLabel = null ) {
 
         if (is_null($petitionId)) {
             if ($request->has('petitionId')) {
@@ -120,23 +120,24 @@ class PetitionController extends Controller
             'chartDataLabels' => $chartDataLabels,
             'chartDataValues' => $chartDataValues,
             'chartDeltaValues' => $chartDeltaValues,
+            'timeFrameLabel' => $timeFrameLabel,
         ]);
 
     }
 
     public function checkMonth(Request $request, $petitionId = null)
     {
-        return $this->check($request, $petitionId, Carbon::now()->subDays(30)->toDateTimeString());
+        return $this->check($request, $petitionId, Carbon::now()->subDays(30)->toDateTimeString(), 'month');
     }
 
     public function checkWeek(Request $request, $petitionId = null)
     {
-        return $this->check($request, $petitionId, Carbon::now()->subDays(7)->toDateTimeString());
+        return $this->check($request, $petitionId, Carbon::now()->subDays(7)->toDateTimeString(), 'week');
     }
 
     public function checkDay(Request $request, $petitionId = null)
     {
-        return $this->check($request, $petitionId, Carbon::now()->subHours(24)->toDateTimeString());
+        return $this->check($request, $petitionId, Carbon::now()->subHours(24)->toDateTimeString(), 'day');
     }
 
     /**

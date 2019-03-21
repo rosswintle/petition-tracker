@@ -63,6 +63,13 @@
     </p>
 </div>
 <div class="container centered">
+    <!-- Could use $timeFrameLabel here -->
+    View: <a href="{{ route('check-petition', ['petition' => $petitionId]) }}">All Time</a> |
+    <a href="{{ route('check-petition-month', ['petition' => $petitionId]) }}">30 days</a> |
+    <a href="{{ route('check-petition-week', ['petition' => $petitionId]) }}">7 days</a> |
+    <a href="{{ route('check-petition-day', ['petition' => $petitionId]) }}">24 hours</a>
+</div>
+<div class="container centered">
     <canvas id="datapointChart" width="400" height="400"></canvas>
 </div>
 <div class="container centered">
