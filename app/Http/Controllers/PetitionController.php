@@ -15,7 +15,7 @@ class PetitionController extends Controller
 
     public function fetchPetitionJson( $petitionId ) {
         $guzzle = new \GuzzleHttp\Client([
-            'allow_redirects' => false,
+            'allow_redirects' => true,
         ]);
 
         try {
