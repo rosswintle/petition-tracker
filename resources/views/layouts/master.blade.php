@@ -91,9 +91,9 @@
 </head>
 <body>
     <div style="background-color: indianred; padding: 1rem;">
-        Hi! My little petition tracker got some heavy traffic this morning and is temporarily broken. I'm working
-        to fix it! Hope to be back soon.<br>
-        Thanks for your patience. If you like this tool then send me a tweet <a href="https://twitter.com/magicroundabout">@magicroundabout</a> of support!
+        Hi! It looks like the Government Petitions site is struggling this morning and they've cut off access to the data I use to track growth.<br>
+        I'm hoping it will be back soon. Thanks for your patience.<br>
+        If you like this tool then send me a tweet of support to <a href="https://twitter.com/magicroundabout">@magicroundabout</a> !
     </div>
     @yield('body')
 
