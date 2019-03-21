@@ -22,6 +22,7 @@ class PetitionController extends Controller
             $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
         } catch (\Exception $e) {
             Log::info('An exception occurred while fetching JSON for petition ' . $petitionId );
+            Log::info($e->getMessage());
             return '';
         }
 
