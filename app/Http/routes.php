@@ -28,5 +28,8 @@ Route::get('/test/{petition_id}', function ( $petitionId ) {
 });
 
 Route::get('/check-petition/{petition_id}', 'PetitionController@Check')->name('check-petition');
+Route::get('/check-petition/{petition_id}/month/', 'PetitionController@CheckMonth')->name('check-petition-month');
+Route::get('/check-petition/{petition_id}/week/', 'PetitionController@CheckWeek')->name('check-petition-week');
+Route::get('/check-petition/{petition_id}/day/', 'PetitionController@CheckDay')->name('check-petition-day');
 Route::get('/check-petition/', 'PetitionController@Check');
 Route::post('/check-petition/', 'PetitionController@Check');

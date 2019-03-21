@@ -8,6 +8,7 @@ use App\Jobs\UpdatePetitionData;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Petition;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class PetitionController extends Controller
@@ -35,7 +36,7 @@ class PetitionController extends Controller
         return $json;
     }
 
-    public function check( Request $request, $petitionId = null ) {
+    public function check( Request $request, $petitionId = null, $startTime = null ) {
 
         if (is_null($petitionId)) {
             if ($request->has('petitionId')) {
@@ -95,10 +96,19 @@ class PetitionController extends Controller
 
         }
 
-        $dataPoints = DataPoint::where('petition_id', $petition->id)
-            ->get();
-        $deltas = DataPointDelta::where('petition_id', $petition->id)
-            ->get();
+        if (!is_null($startTime)) {
+            $dataPoints = DataPoint::where('petition_id', $petition->id)
+                ->where('data_timestamp', '>', $startTime)
+                ->get();
+            $deltas = DataPointDelta::where('petition_id', $petition->id)
+                ->where('delta_timestamp', '>', $startTime)
+                ->get();
+        } else {
+            $dataPoints = DataPoint::where('petition_id', $petition->id)
+                ->get();
+            $deltas = DataPointDelta::where('petition_id', $petition->id)
+                ->get();
+        }
 
         $chartDataLabels = array_pluck($dataPoints, 'data_timestamp');
         $chartDataValues = array_pluck($dataPoints, 'count');
@@ -112,6 +122,21 @@ class PetitionController extends Controller
             'chartDeltaValues' => $chartDeltaValues,
         ]);
 
+    }
+
+    public function checkMonth(Request $request, $petitionId = null)
+    {
+        return $this->check($request, $petitionId, Carbon::now()->subDays(30)->toDateTimeString());
+    }
+
+    public function checkWeek(Request $request, $petitionId = null)
+    {
+        return $this->check($request, $petitionId, Carbon::now()->subDays(7)->toDateTimeString());
+    }
+
+    public function checkDay(Request $request, $petitionId = null)
+    {
+        return $this->check($request, $petitionId, Carbon::now()->subHours(24)->toDateTimeString());
     }
 
     /**
