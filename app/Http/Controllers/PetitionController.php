@@ -209,7 +209,7 @@ class PetitionController extends Controller
 
     public function updateAll() {
 
-        $activePetitions = Petition::where('status', 'open')->get();
+        $activePetitions = Petition::whereIn('status', ['open', 'error'])->get();
 
         $activePetitions->pluck('id')->map( [ $this, 'update' ] );
 
