@@ -90,6 +90,11 @@
     </style>
 </head>
 <body>
+    <div style="background-color: indianred; padding: 1rem;">
+        Hi! My little petition tracker got some heavy traffic this morning and is temporarily broken. I'm working
+        to fix it! Hope to be back soon.<br>
+        Thanks for your patience. If you like this tool then send me a tweet <a href="https://twitter.com/magicroundabout">@magicroundabout</a> of support!
+    </div>
     @yield('body')
 
     <footer>
