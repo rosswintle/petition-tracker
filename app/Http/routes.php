@@ -33,3 +33,8 @@ Route::get('/check-petition/{petition_id}/week/', 'PetitionController@CheckWeek'
 Route::get('/check-petition/{petition_id}/day/', 'PetitionController@CheckDay')->name('check-petition-day');
 Route::get('/check-petition/', 'PetitionController@Check');
 Route::post('/check-petition/', 'PetitionController@Check');
+
+Route::get('/api/v1/petition/{petition_id}', 'PetitionApiController@show');
+
+Route::get('/check-jobs/', 'PetitionController@checkJobs');
+Route::get('/update-all/', 'PetitionController@updateAll');
