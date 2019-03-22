@@ -224,14 +224,14 @@ class PetitionController extends Controller
         $petition->last_count = $petitionAttributes->signature_count;
         $petition->last_count_timestamp = $date;
 
+        // Save any updates to the petition
+        $petition->save();
+
         if ('open' != $petitionAttributes->state) {
 
             $petition->updateStatus($petitionAttributes->state);
 
         }
-
-        // Save any updates to the petition
-        $petition->save();
 
         return;
 
