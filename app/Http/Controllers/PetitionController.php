@@ -227,11 +227,7 @@ class PetitionController extends Controller
         // Save any updates to the petition
         $petition->save();
 
-        if ('open' != $petitionAttributes->state) {
-
-            $petition->updateStatus($petitionAttributes->state);
-
-        }
+        $petition->updateStatus($petitionAttributes->state);
 
         return;
 
