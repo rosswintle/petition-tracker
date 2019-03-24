@@ -34,7 +34,10 @@ Route::get('/check-petition/{petition_id}/day/', 'PetitionController@CheckDay')-
 Route::get('/check-petition/', 'PetitionController@Check');
 Route::post('/check-petition/', 'PetitionController@Check');
 
-Route::get('/api/v1/petition/{petition_id}', 'PetitionApiController@show');
+Route::group(['prefix' => '/api/v1'], function () {
+    Route::get('/petition/{petition_id}', 'PetitionApiController@show');
+    Route::get('/petition/{petition_id}/csv', 'PetitionApiController@showCsv');
+});
 
 Route::get('/check-jobs/', 'PetitionController@checkJobs');
 Route::get('/update-all/', 'PetitionController@updateAll');
