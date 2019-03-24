@@ -90,8 +90,10 @@
 </head>
 <body>
     <div style="background-color: #feb2b2; padding: 1rem;">
-        Hi! It looks like the Government Petitions site is struggling this morning.<br>
-        I'm trying to grab data every 5 minutes, but I'm dependent on their service working!<br>
+        Hi! The Government Petitions site has had its ups and downs lately.<br>
+        I've been trying to grab data every 5 minutes, but it's not always updated that often!<br>
+        Other people have been doing cool things with the petition data too. I made
+        <a href="https://rosswintle.uk/2019/03/all-the-brexit-revoke-article-50-government-petition-resources/">this list</a>.
     </div>
     @yield('body')
 
