@@ -32,7 +32,7 @@
                     callbacks: {
                         label: function(tooltipItem, data) {
                             var date = new moment(tooltipItem.xLabel * 1000).format('D MMM YYYY HH:mm');
-                            return date + ' : ' + tooltipItem.yLabel + ' signatures';
+                            return date + ' : ' + numberWithCommas(tooltipItem.yLabel) + ' signatures';
                         }
                     }
                 }
@@ -67,13 +67,16 @@
                     callbacks: {
                         label: function(tooltipItem, data) {
                             var date = new moment(tooltipItem.xLabel * 1000).format('D MMM YYYY HH:mm');
-                            return date + ' : ' + tooltipItem.yLabel + ' signatures';
+                            return date + ' : ' + numberWithCommas(tooltipItem.yLabel) + ' signatures';
                         }
                     }
                 }
             }
         })
-
+        
+        const numberWithCommas = function(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     </script>
 @endsection
 
@@ -97,7 +100,7 @@
         Link to petition: <a href="https://petition.parliament.uk/petitions/{{ $petitionId }}">https://petition.parliament.uk/petitions/{{ $petitionId }}</a>
     </p>
     <p>
-        This petition has <strong>{{ $petition->last_count }}</strong> signatures (last checked on {{ $petition->last_count_timestamp }})
+        This petition has <strong>{{ number_format($petition->last_count) }}</strong> signatures (last checked on {{ $petition->last_count_timestamp }})
     </p>
 </div>
 <div class="container centered">
