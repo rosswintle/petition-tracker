@@ -89,17 +89,12 @@
     </style>
 </head>
 <body>
-    <div style="background-color: #feb2b2; padding: 1rem;">
-        Hi! The Government Petitions site has had its ups and downs lately.<br>
-        I've been trying to grab data every 5 minutes, but it's not always updated that often!<br>
-        Other people have been doing cool things with the petition data too. I made
-        <a href="https://rosswintle.uk/2019/03/all-the-brexit-revoke-article-50-government-petition-resources/">this list</a>.
-    </div>
     @yield('body')
 
     <footer>
         <div class="container centered">
             <p>An <a href="https://oikos.digital/">Oikos Digital</a> Project, made by <a href="https://twitter.com/magicroundabout">@magicroundabout</a>.</p>
+            <p>Other people have been doing cool stuff with this data too. I made <a href="https://rosswintle.uk/2019/03/all-the-brexit-revoke-article-50-government-petition-resources/">this list</a></p>
             <p>This site uses <a href="https://blog.kownter.com/about-kownter/">Kownter</a> for analytics.
                 This does not use cookies and does not collect any personal data.
                 <a href="https://blog.kownter.com/about-kownter/">Find out more</a>.</p>
