@@ -87,6 +87,12 @@
             color: #DDD;
         }
     </style>
+
+    @if (env('FATHOM_ANALYTICS_CODE'))
+        <!-- Fathom - beautiful, simple website analytics -->
+        <script src="https://cdn.usefathom.com/script.js" site="{{ env('FATHOM_ANALYTICS_CODE') }}" defer></script>
+        <!-- / Fathom -->
+    @endif
 </head>
 <body>
     @yield('body')
