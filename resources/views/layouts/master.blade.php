@@ -100,10 +100,10 @@
     <footer>
         <div class="container centered">
             <p>An <a href="https://oikos.digital/">Oikos Digital</a> Project, made by <a href="https://twitter.com/magicroundabout">@magicroundabout</a>.</p>
+            <p>Support this project by <a href="https://ko-fi.com/magicroundabout">buying me coffee!</a> And please <a href="https://twitter.com/magicroundabout">tell me</a> if you found it useful.</p>
             <p>Other people have been doing cool stuff with this data too. I made <a href="https://rosswintle.uk/2019/03/all-the-brexit-revoke-article-50-government-petition-resources/">this list</a></p>
-            <p>This site uses <a href="https://blog.kownter.com/about-kownter/">Kownter</a> for analytics.
-                This does not use cookies and does not collect any personal data.
-                <a href="https://blog.kownter.com/about-kownter/">Find out more</a>.</p>
+            <p>This site uses <a href="https://blog.kownter.com/about-kownter/">Kownter</a> and <a href="https://usefathom.com/ref/SVE71E">Fathom</a> for analytics.
+                These do not use cookies and do not collect any personal data.</p>
             <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0.</a></p>
         </div>
     </footer>
