@@ -27,7 +27,7 @@
             <ul>
                 @foreach ($petitions as $thisPetition)
                     <li>
-                        <a href="{{ route('check-petition', ['id' => $thisPetition->remote_id])  }}">
+                        <a href="{{ route('check-petition', ['petition_id' => $thisPetition->remote_id])  }}">
                             <strong>{{ $thisPetition->remote_id }}</strong>: {{ $thisPetition->description }}
                         </a>
                     </li>

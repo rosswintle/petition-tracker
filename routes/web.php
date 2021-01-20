@@ -14,13 +14,13 @@
 use App\Petition;
 
 Route::get('/', function () {
-    $petitions = Petition::whereIn('status',['open','error'])
+    $petitions = Petition::whereIn('status', ['open', 'error'])
         ->orderBy('remote_id', 'desc')
         ->get();
     return view('welcome', ['petitions' => $petitions]);
 });
 
-Route::get('/test/{petition_id}', function ( $petitionId ) {
+Route::get('/test/{petition_id}', function ($petitionId) {
     $guzzle = new \GuzzleHttp\Client();
     $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
     $output = (string) $result->getBody();

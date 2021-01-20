@@ -73,7 +73,7 @@
                 }
             }
         })
-        
+
         const numberWithCommas = function(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
@@ -105,10 +105,10 @@
 </div>
 <div class="container centered">
     <!-- Could use $timeFrameLabel here -->
-    View: <a href="{{ route('check-petition', ['petition' => $petitionId]) }}">All Time</a> |
-    <a href="{{ route('check-petition-month', ['petition' => $petitionId]) }}">30 days</a> |
-    <a href="{{ route('check-petition-week', ['petition' => $petitionId]) }}">7 days</a> |
-    <a href="{{ route('check-petition-day', ['petition' => $petitionId]) }}">24 hours</a>
+    View: <a href="{{ route('check-petition', ['petition_id' => $petitionId]) }}">All Time</a> |
+    <a href="{{ route('check-petition-month', ['petition_id' => $petitionId]) }}">30 days</a> |
+    <a href="{{ route('check-petition-week', ['petition_id' => $petitionId]) }}">7 days</a> |
+    <a href="{{ route('check-petition-day', ['petition_id' => $petitionId]) }}">24 hours</a>
 </div>
 <div class="container centered">
     <canvas id="datapointChart" width="400" height="400"></canvas>
