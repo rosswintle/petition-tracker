@@ -90,7 +90,7 @@
 
     @if (env('FATHOM_ANALYTICS_CODE'))
         <!-- Fathom - beautiful, simple website analytics -->
-        <script src="https://cdn.usefathom.com/script.js" site="{{ env('FATHOM_ANALYTICS_CODE') }}" defer></script>
+        <script src="{{ config('app.fathom_analytics_url') }}" site="{{ config('app.fathom_analytics_code') }}" defer></script>
         <!-- / Fathom -->
     @endif
 </head>

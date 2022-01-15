@@ -122,6 +122,13 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+
+    /*
+     * FATHOM
+     */
+    'fathom_analytics_url' => env('FATHOM_ANALYTICS_URL', ''),
+    'fathom_analytics_code' => env('FATHOM_ANALYTICS_CODE', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
