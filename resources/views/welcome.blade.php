@@ -11,7 +11,7 @@
             </h1>
         </header>
         <div class="container centered">
-            {!! Form::open(['action' => 'PetitionController@Check']) !!}
+            {!! Form::open(['route' => 'check-petition-post']) !!}
                 <p>
                     {!! Form::label('petitionId', 'Enter a petition ID') !!}
                     <br>

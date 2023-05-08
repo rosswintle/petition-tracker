@@ -30,12 +30,12 @@ Route::get('/test/{petition_id}', function ($petitionId) {
     dd($output);
 });
 
-Route::get('/check-petition/{petition_id}', [PetitionController::class, 'Check'])->name('check-petition');
-Route::get('/check-petition/{petition_id}/month/', [PetitionController::class, 'CheckMonth'])->name('check-petition-month');
-Route::get('/check-petition/{petition_id}/week/', [PetitionController::class, 'CheckWeek'])->name('check-petition-week');
-Route::get('/check-petition/{petition_id}/day/', [PetitionController::class, 'CheckDay'])->name('check-petition-day');
-Route::get('/check-petition/', [PetitionController::class, 'Check']);
-Route::post('/check-petition/', [PetitionController::class, 'Check']);
+Route::get('/check-petition/{petition_id}', [PetitionController::class, 'check'])->name('check-petition');
+Route::get('/check-petition/{petition_id}/month/', [PetitionController::class, 'checkMonth'])->name('check-petition-month');
+Route::get('/check-petition/{petition_id}/week/', [PetitionController::class, 'checkWeek'])->name('check-petition-week');
+Route::get('/check-petition/{petition_id}/day/', [PetitionController::class, 'checkDay'])->name('check-petition-day');
+Route::get('/check-petition/', [PetitionController::class, 'check'])->name('check-petition-get');
+Route::post('/check-petition/', [PetitionController::class, 'check'])->name('check-petition-post');
 
 Route::group(['prefix' => '/api/v1'], function () {
     Route::get('/petition/{petition_id}', [PetitionApiController::class, 'show']);
