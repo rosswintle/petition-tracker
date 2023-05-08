@@ -11,6 +11,9 @@
 |
 */
 
+use App\Http\Controllers\PetitionApiController;
+use App\Http\Controllers\PetitionController;
+use Illuminate\Support\Facades\Route;
 use App\Petition;
 
 Route::get('/', function () {
@@ -27,17 +30,17 @@ Route::get('/test/{petition_id}', function ($petitionId) {
     dd($output);
 });
 
-Route::get('/check-petition/{petition_id}', 'PetitionController@Check')->name('check-petition');
-Route::get('/check-petition/{petition_id}/month/', 'PetitionController@CheckMonth')->name('check-petition-month');
-Route::get('/check-petition/{petition_id}/week/', 'PetitionController@CheckWeek')->name('check-petition-week');
-Route::get('/check-petition/{petition_id}/day/', 'PetitionController@CheckDay')->name('check-petition-day');
-Route::get('/check-petition/', 'PetitionController@Check');
-Route::post('/check-petition/', 'PetitionController@Check');
+Route::get('/check-petition/{petition_id}', [PetitionController::class, 'Check'])->name('check-petition');
+Route::get('/check-petition/{petition_id}/month/', [PetitionController::class, 'CheckMonth'])->name('check-petition-month');
+Route::get('/check-petition/{petition_id}/week/', [PetitionController::class, 'CheckWeek'])->name('check-petition-week');
+Route::get('/check-petition/{petition_id}/day/', [PetitionController::class, 'CheckDay'])->name('check-petition-day');
+Route::get('/check-petition/', [PetitionController::class, 'Check']);
+Route::post('/check-petition/', [PetitionController::class, 'Check']);
 
 Route::group(['prefix' => '/api/v1'], function () {
-    Route::get('/petition/{petition_id}', 'PetitionApiController@show');
-    Route::get('/petition/{petition_id}/csv', 'PetitionApiController@showCsv');
+    Route::get('/petition/{petition_id}', [PetitionApiController::class, 'show']);
+    Route::get('/petition/{petition_id}/csv', [PetitionApiController::class, 'showCsv']);
 });
 
-Route::get('/check-jobs/', 'PetitionController@checkJobs');
-Route::get('/update-all/', 'PetitionController@updateAll');
+Route::get('/check-jobs/', [PetitionController::class, 'checkJobs']);
+Route::get('/update-all/', [PetitionController::class, 'updateAll']);
