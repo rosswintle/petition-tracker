@@ -108,22 +108,6 @@
         </div>
     </footer>
 
-    @if ( env('KOWNTER_APP_URL') )
-        <script>
-            function kownterHttpGetAsync(theUrl, callback)
-            {
-                var xmlHttp = new XMLHttpRequest();
-                xmlHttp.onreadystatechange = function() {
-                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                        callback(xmlHttp.responseText);
-                }
-                xmlHttp.open("GET", theUrl, true); // true for asynchronous
-                xmlHttp.send(null);
-            }
-            kownterHttpGetAsync( '{{ env('KOWNTER_APP_URL') }}/track?referrer=' + encodeURIComponent( document.referrer ), function() { return true; } );
-        </script>
-    @endif
-
     @yield('footer-scripts')
 </body>
 </html>
