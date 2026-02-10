@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.petition')
 
 @section('title', 'Track growth of UK government petitions')
 
@@ -11,16 +11,17 @@
             </h1>
         </header>
         <div class="container centered">
-            {!! Form::open(['route' => 'check-petition-post']) !!}
+            <form method="POST" action="{{ route('check-petition-post') }}">
+                @csrf
                 <p>
-                    {!! Form::label('petitionId', 'Enter a petition ID') !!}
+                    <label for="petition-id">Enter a petition ID</label>
                     <br>
-                    {!! Form::number('petitionId') !!}
+                    <input type="number" id="petition-id" name="petitionId" />
                 </p>
                 <p>
-                    {!! Form::submit('Track it!') !!}
+                    <input type="submit" value="Track it!" />
                 </p>
-            {!! Form::close() !!}
+            </form>
         </div>
         <div class="container">
             <h2>Open Petitions</h2>

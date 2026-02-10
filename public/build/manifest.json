@@ -1,7 +1,17 @@
 {
-  "resources/sass/app.scss": {
-    "file": "assets/app-4ed993c7.js",
+  "resources/css/app.css": {
+    "file": "assets/app-Dy1NlMwu.css",
+    "src": "resources/css/app.css",
     "isEntry": true,
-    "src": "resources/sass/app.scss"
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-l0sNRNKZ.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
   }
 }

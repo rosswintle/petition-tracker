@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\DataPoint;
-use App\DataPointDelta;
-use App\Petition;
+use App\Models\DataPoint;
+use App\Models\DataPointDelta;
+use App\Models\Petition;
 use Illuminate\Console\Command;
 
 class FillDeltas extends Command
@@ -24,36 +24,24 @@ class FillDeltas extends Command
     protected $description = 'Fills in missing deltas for petition data';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $petitionId = $this->argument('petitionId');
         $petition = Petition::where('remote_id', $petitionId)->first();
         if (empty($petition)) {
             $this->error('Petition is not registered for data collection');
         } else {
-            $this->info('Updating deltas for petition ID ' . $petitionId . ' (Local ID: ' . $petition->id . ')');
-            $this->info('Petition has description: ' . $petition->description);
+            $this->info('Updating deltas for petition ID '.$petitionId.' (Local ID: '.$petition->id.')');
+            $this->info('Petition has description: '.$petition->description);
 
             $dataPoints = DataPoint::where('petition_id', $petition->id)->get();
             // Clean out the deltas - it's easier to recreate them all!
             $existingDeltas = DataPointDelta::where('petition_id', $petition->id)->delete();
 
-            $this->info('There are ' . count($dataPoints) . ' data points');
-            $this->info('There were ' . count($existingDeltas) . ' existing deltas, but I have cleaned them out and will rebuild everything');
+            $this->info('There are '.count($dataPoints).' data points');
+            $this->info('There were '.count($existingDeltas).' existing deltas, but I have cleaned them out and will rebuild everything');
 
             $bar = $this->output->createProgressBar(count($dataPoints));
 

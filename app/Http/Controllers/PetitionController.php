@@ -2,51 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\DataPoint;
-use App\DataPointDelta;
-use App\Jobs\UpdatePetitionData;
+use App\Models\DataPoint;
+use App\Models\DataPointDelta;
+use App\Models\Petition;
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Petition;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PetitionController extends Controller
 {
+    public function fetchPetitionJson(string $petitionId): string
+    {
+        $response = Http::withOptions(
+            [
+                'allow_redirects' => true,
+            ]
+        )->get('https://petition.parliament.uk/petitions/'.$petitionId.'.json');
 
-    public function fetchPetitionJson( $petitionId ) {
-        $guzzle = new \GuzzleHttp\Client([
-            'allow_redirects' => true,
-        ]);
+        if ($response->failed()) {
+            Log::info('An exception occurred while fetching JSON for petition '.$petitionId);
+            Log::info($response->body());
 
-        try {
-            $result = $guzzle->request('GET', 'https://petition.parliament.uk/petitions/' . $petitionId . '.json');
-        } catch (\Exception $e) {
-            Log::info('An exception occurred while fetching JSON for petition ' . $petitionId );
-            Log::info($e->getMessage());
             return '';
         }
 
-        if ( $result->getStatusCode() != 200 ) {
-            Log::info('HTTP response code for fetching petition data for petition ID ' . $petitionId . ' was ' . $result->getStatusCode() );
+        if ($response->status() != 200) {
+            Log::info('HTTP response code for fetching petition data for petition ID '.$petitionId.' was '.$response->status());
+
             return '';
         }
 
-        $json = (string) $result->getBody();
-        return $json;
+        return (string) $response->body();
     }
 
-    public function check( Request $request, $petitionId = null, $startTime = null, $timeFrameLabel = null ) {
-
+    public function check(Request $request, ?string $petitionId = null, ?string $startTime = null, ?string $timeFrameLabel = null)
+    {
         if (is_null($petitionId)) {
+
             if ($request->has('petitionId')) {
 
                 $petitionId = $request->input('petitionId');
+                if (! Str::isMatch('/\d+/', $petitionId)) {
+                    return response('Invalid petition id.', 400);
+                }
 
                 $petition = Petition::where('remote_id', $petitionId);
 
-                if ( $petition ) {
-                    return redirect()->route( 'check-petition', [ 'petition_id' => $petitionId ] );
+                if ($petition) {
+                    return redirect()->route('check-petition', ['petition_id' => $petitionId]);
                 }
 
             } else {
@@ -56,38 +61,27 @@ class PetitionController extends Controller
             }
         }
 
-        $petition = Petition::firstOrNew([
-            'remote_id' => $petitionId
-        ]);
+        $petition = Petition::firstOrNew(
+            [
+                'remote_id' => $petitionId,
+            ]
+        );
 
-        if ( ! isset($petition->description) || empty($petition->description) ) {
+        if (empty($petition->description)) {
 
-            try {
+            $json = $this->fetchPetitionJson($petitionId);
 
-                $json = $this->fetchPetitionJson( $petitionId );
+            $petitionData = json_decode($json);
 
-            } catch ( \Exception $e ) {
-
-                // TODO: Handle error on initial fetch
-
-            }
-
-
-            try {
-
-                $petitionData = \GuzzleHttp\json_decode($json);
-
-            } catch ( \Exception $e ) {
-
-                return response( 'Error decoding the petition. It may have expired or been removed.', '503');
-
+            if (is_null($petitionData)) {
+                return response('Error decoding the petition. It may have expired or been removed.', '503');
             }
 
             $petitionAttributes = $petitionData->data->attributes;
             $petition->description = $petitionAttributes->action;
             $petition->status = $petitionAttributes->state;
             $petition->last_count = $petitionAttributes->signature_count;
-            $petition->last_count_timestamp = date("Y-m-d H:i:s");
+            $petition->last_count_timestamp = date('Y-m-d H:i:s');
 
             $petition->save();
 
@@ -96,7 +90,7 @@ class PetitionController extends Controller
 
         }
 
-        if (!is_null($startTime)) {
+        if (! is_null($startTime)) {
             $dataPoints = DataPoint::where('petition_id', $petition->id)
                 ->where('data_timestamp', '>', $startTime)
                 ->get();
@@ -110,110 +104,93 @@ class PetitionController extends Controller
                 ->get();
         }
 
-        $chartDataXY = $dataPoints->map(function ($dataPoint) {
-            $timestamp = Carbon::parse($dataPoint->data_timestamp)->getTimestamp();
-            return ['x' => $timestamp, 'y' => $dataPoint->count];
-        });
-        $chartDeltaXY = $deltas->map(function ($dataPoint) {
-            $timestamp = Carbon::parse($dataPoint->delta_timestamp)->getTimestamp();
-            return ['x' => $timestamp, 'y' => $dataPoint->delta];
-        });
+        $chartDataXY = $dataPoints->map(
+            function ($dataPoint) {
+                $timestamp = Carbon::parse($dataPoint->data_timestamp)->getTimestamp();
 
-        return view('petitions.check', [
-            'petitionId' => $petitionId,
-            'petition' => $petition,
-            'chartDataValues' => $chartDataXY,
-            'chartDeltaValues' => $chartDeltaXY,
-            'timeFrameLabel' => $timeFrameLabel,
-        ]);
+                return ['x' => $timestamp, 'y' => $dataPoint->count];
+            }
+        );
+        $chartDeltaXY = $deltas->map(
+            function ($dataPoint) {
+                $timestamp = Carbon::parse($dataPoint->delta_timestamp)->getTimestamp();
+
+                return ['x' => $timestamp, 'y' => $dataPoint->delta];
+            }
+        );
+
+        return view(
+            'petitions.check', [
+                'petitionId' => $petitionId,
+                'petition' => $petition,
+                'chartDataValues' => $chartDataXY,
+                'chartDeltaValues' => $chartDeltaXY,
+                'timeFrameLabel' => $timeFrameLabel,
+            ]
+        );
 
     }
 
-    public function checkMonth(Request $request, $petitionId = null)
+    public function checkMonth(Request $request, ?string $petitionId = null)
     {
         return $this->check($request, $petitionId, Carbon::now()->subDays(30)->toDateTimeString(), 'month');
     }
 
-    public function checkWeek(Request $request, $petitionId = null)
+    public function checkWeek(Request $request, ?string $petitionId = null)
     {
         return $this->check($request, $petitionId, Carbon::now()->subDays(7)->toDateTimeString(), 'week');
     }
 
-    public function checkDay(Request $request, $petitionId = null)
+    public function checkDay(Request $request, ?string $petitionId = null)
     {
         return $this->check($request, $petitionId, Carbon::now()->subHours(24)->toDateTimeString(), 'day');
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  int $id
-     * @return null
      */
-    public function update($id)
+    public function update(int $id)
     {
+        $petition = Petition::find($id);
 
-        $petition = Petition::find( $id );
-
-        if ( empty( $petition ) ) {
-
-            Log::info( 'Could not find a petition entry in the database for petition ID ' . $this->petitionId );
+        if (empty($petition)) {
+            Log::info('Could not find a petition entry in the database for petition ID '.$this->petitionId);
             return;
-
         }
 
-        try {
+        $json = $this->fetchPetitionJson($petition->remote_id);
 
-            $json = $this->fetchPetitionJson($petition->remote_id);
+        $petitionData = json_decode($json);
 
-        } catch (\Exception $e) {
-
-            Log::info('Error while fetching petition data for petition ID ' . $petition->remote_id);
+        if (is_null($petitionData)) {
             $petition->markError();
-            return;
-
-        }
-
-        try {
-
-            $petitionData = \GuzzleHttp\json_decode($json);
-
-        } catch (\Exception $e) {
-
-            Log::info('Error while decoding petition JSON for petition ID ' . $petition->remote_id);
-            $petition->markError();
-            return;
-
+            return response('Error while decoding petition JSON for petition ID '.$petition->remote_id, '503');
         }
 
         if (empty($petitionData)) {
-
-            Log::info('Petition data for petition ID ' . $petition->remote_id . ' was empty for some reason');
             $petition->markMissing();
-            return;
-
+            return response('Petition data for petition ID '.$petition->remote_id.' was empty for some reason', 503);
         }
 
         $petitionAttributes = $petitionData->data->attributes;
 
-        $date = date("Y-m-d H:i:s");
+        $date = date('Y-m-d H:i:s');
 
         // Fetch the last value for creating the delta later
         $lastDataPoint = DataPoint::where('petition_id', $id)->orderBy('id', 'desc')->first();
 
         // Always add a data point. If petition is now closed then
         // this is a final data point.
-        $dataPoint = new DataPoint();
+        $dataPoint = new DataPoint;
         $dataPoint->data_timestamp = $date;
         $dataPoint->petition_id = $id;
         $dataPoint->count = $petitionAttributes->signature_count;
         $dataPoint->save();
 
-
-        $delta = new DataPointDelta();
+        $delta = new DataPointDelta;
         $delta->delta_timestamp = $date;
         $delta->petition_id = $id;
-        if (!empty($lastDataPoint)) {
+        if (! empty($lastDataPoint)) {
             $delta->delta = $petitionAttributes->signature_count - $lastDataPoint->count;
         } else {
             $delta->delta = 0;
@@ -228,23 +205,16 @@ class PetitionController extends Controller
         $petition->save();
 
         $petition->updateStatus($petitionAttributes->state);
-
-        return;
-
     }
 
-    public function updateAll() {
-
+    public function updateAll()
+    {
         $activePetitions = Petition::whereIn('status', ['open', 'error'])->get();
-
-        $activePetitions->pluck('id')->map( [ $this, 'update' ] );
-
+        $activePetitions->pluck('id')->map([$this, 'update']);
     }
 
     /**
      * Adds a data collection job for the specified
-     *
-     * @param $id
      */
     public function dispatchPetitionJob($id)
     {
@@ -253,9 +223,9 @@ class PetitionController extends Controller
         $this->dispatch($job);
     }
 
-    public function checkJobs() {
+    public function checkJobs()
+    {
         $petitions = Petition::where('status', 'open')->get();
         dd($petitions);
     }
-
 }

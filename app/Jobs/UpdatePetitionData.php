@@ -2,41 +2,29 @@
 
 namespace App\Jobs;
 
-use App\DataPoint;
-use App\DataPointDelta;
 use App\Http\Controllers\PetitionController;
-use App\Jobs\Job;
-use App\Petition;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Queue\Queueable;
 
-class UpdatePetitionData extends Job implements ShouldQueue
+class UpdatePetitionData implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use Queueable;
 
-    protected $petitionId;
+    protected int $petitionId;
 
     /**
      * Create a new job instance.
-     *
-     * @param $petitionId
      */
-    public function __construct( $petitionId )
+    public function __construct($petitionId)
     {
         $this->petitionId = $petitionId;
     }
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle( PetitionController $controller )
+    public function handle(PetitionController $controller): void
     {
-
-        $controller->update( $this->petitionId );
-
+        $controller->update($this->petitionId);
     }
 }
