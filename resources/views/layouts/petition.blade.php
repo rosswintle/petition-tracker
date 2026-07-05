@@ -88,9 +88,9 @@
         }
     </style>
 
-    @if (env('FATHOM_ANALYTICS_CODE'))
+    @if (config('fathom.fathom_analytics_url') !== '')
         <!-- Fathom - beautiful, simple website analytics -->
-        <script src="{{ config('app.fathom_analytics_url') }}" site="{{ config('app.fathom_analytics_code') }}" defer></script>
+        <script src="https://cdn.usefathom.com/script.js" data-site="{{ config('fathom.fathom_analytics_code') }}" defer></script>
         <!-- / Fathom -->
     @endif
 </head>
